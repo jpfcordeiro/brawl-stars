@@ -1,4 +1,3 @@
-import React from 'react';
 import { motion } from 'framer-motion';
 
 const Home = () => {
@@ -42,10 +41,8 @@ const Home = () => {
 
     return (
         <div className="relative min-h-screen overflow-hidden">
-            {/* Animated Background */}
             <div className="absolute inset-0 bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900 animate-gradient"></div>
             
-            {/* Decorative Elements */}
             <div className="absolute inset-0 overflow-hidden">
                 <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-purple-700/10 rounded-full blur-2xl animate-pulse"></div>
                 <div className="absolute -bottom-1/2 -right-1/2 w-full h-full bg-yellow-400/5 rounded-full blur-2xl animate-pulse" style={{ animationDelay: '1s' }}></div>
@@ -57,9 +54,8 @@ const Home = () => {
                 animate="visible"
                 variants={containerVariants}
             >
-                {/* Hero Section */}
                 <motion.section 
-                    className="container mx-auto px-4 py-20 text-center"
+                    className="container mx-auto px-4 py-10 text-center"
                     variants={itemVariants}
                 >
                     <motion.h1 
@@ -80,13 +76,12 @@ const Home = () => {
                     </motion.p>
                 </motion.section>
 
-                {/* Features Section */}
                 <motion.section 
-                    className="container mx-auto px-4 py-12"
+                    className="container mx-auto px-4 py-5"
                     variants={itemVariants}
                 >
                     <motion.h2 
-                        className="text-3xl font-bold mb-12 text-center text-white"
+                        className="text-3xl font-bold mb-8 text-center text-white"
                         initial={{ scale: 0.5, opacity: 0 }}
                         animate={{ scale: 1, opacity: 1 }}
                         transition={{ duration: 0.5, delay: 0.4 }}
@@ -94,7 +89,6 @@ const Home = () => {
                         O que você encontra aqui?
                     </motion.h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-                        {/* Brawlers Card */}
                         <motion.div 
                             className="bg-purple-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                             variants={cardVariants}
@@ -106,7 +100,6 @@ const Home = () => {
                             </p>
                         </motion.div>
 
-                        {/* Game Modes Card */}
                         <motion.div 
                             className="bg-purple-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                             variants={cardVariants}
@@ -130,7 +123,6 @@ const Home = () => {
                             </p>
                         </motion.div>
 
-                        {/* Events Card */}
                         <motion.div 
                             className="bg-purple-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                             variants={cardVariants}
@@ -144,7 +136,6 @@ const Home = () => {
                     </div>
                 </motion.section>
 
-                {/* Call to Action */}
                 <motion.section 
                     className="container mx-auto px-4 py-12 text-center"
                     variants={itemVariants}
