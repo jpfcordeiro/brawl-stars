@@ -10,15 +10,8 @@ import {
     CardHeader,
 } from "@material-tailwind/react";
 
-interface Brawler {
-    id: number;
-    name: string;
-    rarity: string;
-    class: string;
-    health: number;
-    damage: number;
-    image: string;
-}
+import { useBrawler } from '../context/BrawlerContext';
+
 
 const rarityColors: { [key: string]: string } = {
     'Comum': 'bg-gray-400',
@@ -26,7 +19,8 @@ const rarityColors: { [key: string]: string } = {
     'Super Raro': 'bg-purple-400',
     'Épico': 'bg-purple-600',
     'Mítico': 'bg-pink-500',
-    'Lendário': 'bg-yellow-400'
+    'Lendário': 'bg-yellow-400',
+    'Ultra Legendary': 'bg-yellow-400'
 };
 
 const classColors: { [key: string]: string } = {
@@ -34,36 +28,24 @@ const classColors: { [key: string]: string } = {
     'Tank': 'bg-blue-500',
     'Suporte': 'bg-green-500',
     'Assassino': 'bg-purple-500',
-    'Controle': 'bg-yellow-500'
+    'Controle': 'bg-yellow-500',
+    'Unknown': 'bg-gray-500'
 };
 
-const brawlers: Brawler[] = [
-    { id: 1, name: "Shelly", rarity: "Comum", class: "Atirador", health: 3600, damage: 1000, image: "/brawlers/shelly.png" },
-    { id: 2, name: "Colt", rarity: "Comum", class: "Atirador", health: 3200, damage: 1200, image: "/brawlers/colt.png" },
-    { id: 3, name: "Bull", rarity: "Raro", class: "Tanque", health: 5000, damage: 800, image: "/brawlers/bull.png" },
-    { id: 55, name: "Hank", rarity: "Mítico", class: "Tanque", health: 5000, damage: 800, image: "/brawlers/hank.png" },
-    { id: 56, name: "Pearl", rarity: "Mítico", class: "Atirador", health: 3200, damage: 1200, image: "/brawlers/pearl.png" },
-    { id: 57, name: "Charlie", rarity: "Mítico", class: "Controle", health: 3000, damage: 900, image: "/brawlers/charlie.png" },
-    { id: 58, name: "Mico", rarity: "Mítico", class: "Assassino", health: 3000, damage: 1200, image: "/brawlers/mico.png" },
-    { id: 59, name: "Doug", rarity: "Mítico", class: "Suporte", health: 3400, damage: 800, image: "/brawlers/doug.png" },
-    { id: 60, name: "Kit", rarity: "Mítico", class: "Assassino", health: 3000, damage: 1200, image: "/brawlers/kit.png" },
-    { id: 61, name: "Larry & Lawrie", rarity: "Mítico", class: "Atirador", health: 3200, damage: 1200, image: "/brawlers/larrylawrie.png" },
-    { id: 62, name: "Angelo", rarity: "Mítico", class: "Atirador", health: 3600, damage: 1000, image: "/brawlers/angelo.png" },
-    { id: 63, name: "Melodie", rarity: "Mítico", class: "Atirador", health: 3200, damage: 1200, image: "/brawlers/melodie.png" }
-];
-
-const rarities = ["Todos", "Comum", "Raro", "Super Raro", "Lendário"];
-const classes = ["Todos", "Atirador", "Tanque", "Suporte", "Lutador"];
 
 export function Brawlers() {
+    const brawlers = useBrawler();
     const [searchTerm, setSearchTerm] = useState("");
     const [selectedRarity, setSelectedRarity] = useState("Todos");
     const [selectedClass, setSelectedClass] = useState("Todos");
 
-    const filteredBrawlers = brawlers.filter(brawler => {
+    const uniqueRarities = ["Todos", ...new Set(brawlers.brawlers.map((b: any) => b.rarity.name))];
+    const uniqueClasses = ["Todos", ...new Set(brawlers.brawlers.map((b: any) => b.class.name))];
+
+    const filteredBrawlers = brawlers.brawlers.filter((brawler: any) => {
         const matchesSearch = brawler.name.toLowerCase().includes(searchTerm.toLowerCase());
-        const matchesRarity = selectedRarity === "Todos" || brawler.rarity === selectedRarity;
-        const matchesClass = selectedClass === "Todos" || brawler.class === selectedClass;
+        const matchesRarity = selectedRarity === "Todos" || brawler.rarity.name === selectedRarity;
+        const matchesClass = selectedClass === "Todos" || brawler.class.name === selectedClass;
         return matchesSearch && matchesRarity && matchesClass;
     });
 
@@ -105,44 +87,69 @@ export function Brawlers() {
 
                     <motion.div 
                         variants={itemVariants}
-                        className="flex flex-col md:flex-row gap-4 justify-center items-center"
+                        className="flex flex-col md:flex-row gap-6 justify-center items-center bg-purple-800/50 p-8 rounded-2xl backdrop-blur-sm w-full max-w-5xl mx-auto"
                     >
-                        <div className="w-full md:w-64">
+                        <div className="w-full md:w-80">
                             <Input
                                 label="Pesquisar brawler"
                                 value={searchTerm}
                                 onChange={(e) => setSearchTerm(e.target.value)}
-                                className="!text-white"
+                                className="!text-white !bg-purple-700/50 !text-lg p-1 rounded"
                                 color="white"
                                 crossOrigin={undefined}
+                                icon={
+                                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-6 h-6 text-white">
+                                        <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+                                    </svg>
+                                }
                             />
                         </div>
-                        <div className="w-full md:w-48">
+                        <div className="w-full md:w-64">
                             <Select
-                                label="Raridade"
+                                placeholder="Raridade"
                                 value={selectedRarity}
                                 onChange={(value) => setSelectedRarity(value || "Todos")}
-                                className="!text-white"
+                                className="!text-white !bg-purple-700/50 !text-lg"
                                 color="white"
+                                animate={{
+                                    mount: { y: 0 },
+                                    unmount: { y: 25 },
+                                }}
+                                menuProps={{
+                                    className: "bg-purple-800/90 backdrop-blur-sm"
+                                }}
                             >
-                                {rarities.map((rarity) => (
-                                    <Option key={rarity} value={rarity}>
-                                        {rarity}
+                                {uniqueRarities.map((rarity) => (
+                                    <Option key={rarity} value={rarity} className="text-white hover:bg-purple-600 text-lg">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-4 h-4 rounded-full ${rarityColors[rarity] || 'bg-gray-400'}`} />
+                                            {rarity}
+                                        </div>
                                     </Option>
                                 ))}
                             </Select>
                         </div>
-                        <div className="w-full md:w-48">
+                        <div className="w-full md:w-64">
                             <Select
-                                label="Classe"
+                                placeholder="Classe"
                                 value={selectedClass}
                                 onChange={(value) => setSelectedClass(value || "Todos")}
-                                className="!text-white"
+                                className="!text-white !bg-purple-700/50 !text-lg"
                                 color="white"
+                                animate={{
+                                    mount: { y: 0 },
+                                    unmount: { y: 25 },
+                                }}
+                                menuProps={{
+                                    className: "bg-purple-800/90 backdrop-blur-sm"
+                                }}
                             >
-                                {classes.map((classe) => (
-                                    <Option key={classe} value={classe}>
-                                        {classe}
+                                {uniqueClasses.map((classe) => (
+                                    <Option key={classe} value={classe} className="text-white hover:bg-purple-600 text-lg">
+                                        <div className="flex items-center gap-3">
+                                            <div className={`w-4 h-4 rounded-full ${classColors[classe] || 'bg-gray-400'}`} />
+                                            {classe}
+                                        </div>
                                     </Option>
                                 ))}
                             </Select>
@@ -152,7 +159,7 @@ export function Brawlers() {
                     {/* Lista de Brawlers */}
                     <motion.div
                         variants={itemVariants}
-                        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6"
+                        className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4"
                     >
                         {filteredBrawlers.map((brawler) => (
                             <motion.div
@@ -160,39 +167,57 @@ export function Brawlers() {
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
                             >
-                                <Card className="bg-purple-800/90 backdrop-blur-sm border-0 shadow-lg">
+                                <Card className="bg-purple-800/90 backdrop-blur-sm border-0 shadow-lg rounded-2xl overflow-hidden">
                                     <CardHeader
                                         floated={false}
                                         shadow={false}
-                                        className="h-48 bg-purple-700/50 rounded-t-xl"
+                                        className="h-40 bg-purple-700/50 rounded-t-2xl p-4"
                                     >
-                                        <img
-                                            src={brawler.image}
-                                            alt={brawler.name}
-                                            className="h-full w-full object-contain"
-                                        />
+                                        <div className="relative w-full h-full">
+                                            <img
+                                                src={brawler.imageUrl2}
+                                                alt={brawler.name}
+                                                className="h-full w-full object-contain rounded-xl"
+                                            />
+                                            <div className="absolute bottom-0 left-0 right-0 bg-black/50 p-2 rounded-b-xl">
+                                                <div className="flex items-center justify-between mb-1">
+                                                    <span className="text-white text-xs font-semibold">HP</span>
+                                                    <span className="text-white text-xs">7200</span>
+                                                </div>
+                                                <div className="w-full bg-gray-700 rounded-full h-2">
+                                                    <div 
+                                                        className="bg-green-500 h-2 rounded-full" 
+                                                        style={{ width: '100%' }}
+                                                    />
+                                                </div>
+                                            </div>
+                                        </div>
                                     </CardHeader>
-                                    <CardBody className="text-white">
-                                        <Typography variant="h5" className="mb-2">
+                                    <CardBody className="text-white p-4">
+                                        <Typography variant="h5" className="mb-2 text-center">
                                             {brawler.name}
                                         </Typography>
-                                        <div className="flex justify-between text-sm">
-                                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${rarityColors[brawler.rarity]} text-white`}>
-                                                {brawler.rarity}
+                                        <div className="flex justify-between text-sm mb-3">
+                                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${rarityColors[brawler.rarity.name] || 'bg-yellow-400'} text-white`}>
+                                                {brawler.rarity.name}
                                             </span>
-                                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${classColors[brawler.class]} text-white`}>
-                                                {brawler.class}
+                                            <span className={`px-2 py-1 rounded-full text-xs font-semibold ${classColors[brawler.class.name] || 'bg-gray-400'} text-white`}>
+                                                {brawler.class.name}
                                             </span>
                                         </div>
-                                        <div className="mt-4 grid grid-cols-2 gap-2 text-sm">
-                                            <div>
-                                                <span className="text-gray-400">Vida:</span>
-                                                <span className="ml-2">{brawler.health}</span>
-                                            </div>
-                                            <div>
-                                                <span className="text-gray-400">Dano:</span>
-                                                <span className="ml-2">{brawler.damage}</span>
-                                            </div>
+                                        <div className="mt-2 text-sm">
+                                            <p className="text-gray-300 line-clamp-2">{brawler.description}</p>
+                                        </div>
+                                        <div className="mt-3 flex gap-2">
+                                            {brawler.starPowers?.slice(0, 2).map((power) => (
+                                                <img 
+                                                    key={power.id}
+                                                    src={power.imageUrl} 
+                                                    alt={power.name}
+                                                    className="w-8 h-8 rounded-full bg-purple-900/50 p-1"
+                                                    title={power.name}
+                                                />
+                                            ))}
                                         </div>
                                     </CardBody>
                                 </Card>
