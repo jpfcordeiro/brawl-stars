@@ -25,15 +25,15 @@ const menuItems: MenuItem[] = [
     },
     {
         title: "Modos de Jogo",
-        href: "#"
+        href: "/modos"
     },
     {
         title: "Eventos",
-        href: "#"
+        href: "/eventos"
     },
     {
         title: "Mapas",
-        href: "#"
+        href: "/mapas"
     }
 ];
 
