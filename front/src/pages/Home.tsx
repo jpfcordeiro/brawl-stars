@@ -1,4 +1,5 @@
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
 const Home = () => {
     const containerVariants = {
@@ -88,7 +89,7 @@ const Home = () => {
                     >
                         O que você encontra aqui?
                     </motion.h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
                         <motion.div 
                             className="bg-purple-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
                             variants={cardVariants}
@@ -133,6 +134,17 @@ const Home = () => {
                                 Fique atualizado com os eventos atuais e futuros. Não perca nenhuma oportunidade de ganhar recompensas especiais!
                             </p>
                         </motion.div>
+
+                        <motion.div 
+                            className="bg-purple-800/90 backdrop-blur-sm p-6 rounded-xl shadow-lg hover:shadow-xl transition-shadow"
+                            variants={cardVariants}
+                            whileHover="hover"
+                        >
+                            <h3 className="text-2xl font-bold mb-4 text-yellow-400">Icones</h3>
+                            <p className="text-gray-100">
+                                Monte seu estilo com a galeria de icones de perfil, clube e jogador em uma experiencia visual completa.
+                            </p>
+                        </motion.div>
                     </div>
                 </motion.section>
 
@@ -156,16 +168,18 @@ const Home = () => {
                     >
                         Explore nosso site e descubra tudo o que você precisa saber para se tornar um jogador ainda melhor!
                     </motion.p>
-                    <motion.button 
-                        className="bg-yellow-400 text-purple-900 px-8 py-3 rounded-lg font-bold text-lg hover:bg-yellow-300 transition-colors shadow-lg hover:shadow-xl"
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
-                        initial={{ y: 20, opacity: 0 }}
-                        animate={{ y: 0, opacity: 1 }}
-                        transition={{ duration: 0.5, delay: 0.8 }}
-                    >
-                        Explorar Agora
-                    </motion.button>
+                    <Link to="/brawlers">
+                        <motion.button 
+                            className="bg-yellow-400 text-purple-900 px-8 py-3 rounded-lg font-bold text-lg hover:bg-yellow-300 transition-colors shadow-lg hover:shadow-xl"
+                            whileHover={{ scale: 1.05 }}
+                            whileTap={{ scale: 0.95 }}
+                            initial={{ y: 20, opacity: 0 }}
+                            animate={{ y: 0, opacity: 1 }}
+                            transition={{ duration: 0.5, delay: 0.8 }}
+                        >
+                            Explorar Agora
+                        </motion.button>
+                    </Link>
                 </motion.section>
             </motion.div>
         </div>

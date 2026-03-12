@@ -1,3 +1,4 @@
+/* eslint-disable react-refresh/only-export-components */
 import { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import api from '../services/api';
 
@@ -54,7 +55,7 @@ interface Brawler {
     descriptionHtml: string;
     starPowers: StarPower[];
     gadgets: Gadget[];
-    videos: any[];
+    videos: unknown[];
 }
 
 interface BrawlerContextData {

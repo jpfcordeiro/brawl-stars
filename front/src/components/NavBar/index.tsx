@@ -1,13 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import {
-    Navbar,
-    Collapse,
-    Typography,
-    IconButton,
-    List,
-    ListItem,
-} from "@material-tailwind/react";
+import { Link, NavLink } from "react-router-dom";
 import {
     Bars3Icon,
     XMarkIcon,
@@ -34,30 +26,32 @@ const menuItems: MenuItem[] = [
     {
         title: "Mapas",
         href: "/mapas"
+    },
+    {
+        title: "Icones",
+        href: "/icones"
     }
 ];
 
 function NavListMenu() {
     return (
-        <div className="flex items-center gap-6">
-            {menuItems.map(({ title, href }, key) => (
-                <Typography as="div" variant="small" className="font-medium" key={key}>
-                    <ListItem
-                        className="flex items-center gap-2 py-2 px-4 font-medium hover:bg-purple-800 rounded-lg transition-colors cursor-pointer"
-                    >
-                        <Link to={href} style={{color: "white"}}>{title}</Link>
-                    </ListItem>
-                </Typography>
+        <div className="flex flex-col lg:flex-row items-start lg:items-center gap-2 lg:gap-3">
+            {menuItems.map(({ title, href }) => (
+                <NavLink
+                    key={href}
+                    to={href}
+                    className={({ isActive }) =>
+                        `py-2 px-4 rounded-lg font-medium transition-colors ${
+                            isActive
+                                ? "bg-yellow-400 text-purple-950"
+                                : "text-white hover:bg-purple-800"
+                        }`
+                    }
+                >
+                    {title}
+                </NavLink>
             ))}
         </div>
-    );
-}
-
-function NavList() {
-    return (
-        <List className="flex items-center gap-6 p-0">
-            <NavListMenu />
-        </List>
     );
 }
 
@@ -72,43 +66,37 @@ export function NavigationbarWithDropdownMultilevelMenu() {
     }, []);
 
     return (
-        <Navbar 
-            className="sticky top-0 z-50 w-full max-w-none rounded-none px-4 py-2 bg-purple-900" 
-            placeholder={undefined}
-        >
+        <nav className="sticky top-0 z-50 w-full px-4 py-2 bg-purple-900/95 backdrop-blur border-b border-purple-700">
             <div className="container mx-auto flex items-center justify-between text-white">
                 <div className="flex items-center gap-2">
                     <img src="/src/assets/favicon.png" alt="BrawlerHUB" className="h-8 w-8 object-contain" />
                     <Link to="/">
-                        <Typography
-                            as="span"
-                            variant="h6"
-                            className="mr-4 cursor-pointer py-1.5 text-3xl font-extrabold tracking-tight !text-yellow-400 hover:!text-yellow-300 transition-colors drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]"
-                            placeholder={undefined}
-                        >
+                        <span className="mr-4 cursor-pointer py-1.5 text-3xl font-extrabold tracking-tight text-yellow-400 hover:text-yellow-300 transition-colors drop-shadow-[0_2px_2px_rgba(0,0,0,0.5)]">
                             BrawlerHUB
-                        </Typography>
+                        </span>
                     </Link>
                 </div>
                 <div className="hidden lg:block">
-                    <NavList />
+                    <NavListMenu />
                 </div>
-                <IconButton
-                    variant="text"
-                    className="lg:hidden text-white"
+                <button
+                    type="button"
+                    className="lg:hidden text-white p-2 rounded-md hover:bg-purple-800"
                     onClick={() => setOpenNav(!openNav)}
-                    placeholder={undefined}
                 >
                     {openNav ? (
                         <XMarkIcon className="h-6 w-6" strokeWidth={2} />
                     ) : (
                         <Bars3Icon className="h-6 w-6" strokeWidth={2} />
                     )}
-                </IconButton>
+                </button>
             </div>
-            <Collapse open={openNav} className="lg:hidden">
-                <NavList />
-            </Collapse>
-        </Navbar>
+
+            {openNav && (
+                <div className="lg:hidden pt-3 pb-1 container mx-auto">
+                    <NavListMenu />
+                </div>
+            )}
+        </nav>
     );
 }
