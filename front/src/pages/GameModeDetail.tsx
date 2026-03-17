@@ -38,15 +38,16 @@ export default function GameModeDetail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                 <div className="flex justify-center">
                   <img
-                    src={gameMode.imageUrl2 || gameMode.imageUrl}
-                    alt={gameMode.name}
+                    src={gameMode.imageUrl2 || gameMode.imageUrl || '/fallback-gamemode.png'}
+                    alt={gameMode.name || 'Modo sem nome'}
                     className="w-full max-w-sm object-cover rounded-xl drop-shadow-[0_18px_25px_rgba(0,0,0,0.35)]"
+                    onError={e => { e.currentTarget.src = '/fallback-gamemode.png'; }}
                   />
                 </div>
 
                 <div>
                   <p className="text-cyan-200 uppercase tracking-wider text-sm mb-2">Modo de Jogo</p>
-                  <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">{gameMode.name}</h1>
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">{gameMode.name || 'Nome desconhecido'}</h1>
 
                   <div className="flex flex-wrap items-center gap-2 mb-4">
                     <span
@@ -55,38 +56,38 @@ export default function GameModeDetail() {
                     >
                       Modo Oficial
                     </span>
-                    {gameMode.title && (
+                    {gameMode.title ? (
                       <span className="px-3 py-1 rounded-full text-xs font-bold bg-cyan-500/30 text-cyan-100 border border-cyan-400/40">
                         {gameMode.title}
                       </span>
-                    )}
+                    ) : null}
                     <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-700 text-purple-100">
-                      ID #{gameMode.id}
+                      ID #{gameMode.id || '???'}
                     </span>
-                    {gameMode.disabled && (
+                    {gameMode.disabled ? (
                       <span className="px-3 py-1 rounded-full text-xs font-bold bg-red-500/30 text-red-100 border border-red-400/40">
                         Desativado
                       </span>
-                    )}
+                    ) : null}
                   </div>
 
                   <p className="text-gray-100 leading-relaxed mb-4">
                     {gameMode.description || 'Sem descricao disponivel para este modo de jogo.'}
                   </p>
 
-                  {gameMode.shortDescription && (
+                  {gameMode.shortDescription ? (
                     <div className="mb-4 bg-purple-800/60 border border-purple-700 rounded-lg p-4">
                       <p className="text-sm text-yellow-200 font-semibold">Resumo rapido</p>
                       <p className="text-sm text-purple-100 mt-1">{gameMode.shortDescription}</p>
                     </div>
-                  )}
+                  ) : null}
 
-                  {gameMode.tutorial && (
+                  {gameMode.tutorial ? (
                     <div className="mb-4 bg-purple-800/60 border border-purple-700 rounded-lg p-4">
                       <p className="text-sm text-cyan-200 font-semibold">Como jogar</p>
                       <p className="text-sm text-purple-100 mt-1">{gameMode.tutorial}</p>
                     </div>
-                  )}
+                  ) : null}
 
                   <div className="bg-purple-800/60 border border-purple-700 rounded-lg p-4">
                     <p className="text-sm text-purple-100">
@@ -94,11 +95,11 @@ export default function GameModeDetail() {
                     </p>
                   </div>
 
-                  {gameMode.lastActive && (
+                  {gameMode.lastActive ? (
                     <p className="text-xs text-purple-200 mt-3">
                       Ultima atividade registrada: {new Date(gameMode.lastActive).toLocaleString('pt-BR')}
                     </p>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </section>

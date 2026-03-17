@@ -39,15 +39,16 @@ export default function MapDetail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                 <div className="flex justify-center">
                   <img
-                    src={map.imageUrl}
-                    alt={map.name}
+                    src={map.imageUrl || '/fallback-map.png'}
+                    alt={map.name || 'Mapa sem nome'}
                     className="w-full max-w-sm object-cover rounded-xl drop-shadow-[0_18px_25px_rgba(0,0,0,0.35)]"
+                    onError={e => { e.currentTarget.src = '/fallback-map.png'; }}
                   />
                 </div>
 
                 <div>
                   <p className="text-cyan-200 uppercase tracking-wider text-sm mb-2">Detalhes do Mapa</p>
-                  <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">{map.name}</h1>
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">{map.name || 'Nome desconhecido'}</h1>
 
                   <div className="flex flex-wrap items-center gap-2 mb-4">
                     <span
@@ -57,7 +58,7 @@ export default function MapDetail() {
                       {map.gameMode?.name || 'Modo desconhecido'}
                     </span>
                     <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-700 text-purple-100">
-                      ID #{map.id}
+                      ID #{map.id || '???'}
                     </span>
                   </div>
 
@@ -67,20 +68,21 @@ export default function MapDetail() {
 
                   <div className="bg-purple-800/60 border border-purple-700 rounded-lg p-4">
                     <p className="text-sm text-purple-100">
-                      Este mapa faz parte do modo de jogo <span className="font-bold">{map.gameMode?.name}</span> e oferece um ambiente unico para estrategia e competicao.
+                      Este mapa faz parte do modo de jogo <span className="font-bold">{map.gameMode?.name || 'Desconhecido'}</span> e oferece um ambiente unico para estrategia e competicao.
                     </p>
                   </div>
 
-                  {map.environment?.imageUrl && (
+                  {map.environment?.imageUrl ? (
                     <div className="mt-4 bg-purple-800/60 border border-purple-700 rounded-lg p-4">
                       <p className="text-sm text-cyan-200 font-semibold mb-2">Tema do ambiente</p>
                       <img
                         src={map.environment.imageUrl}
-                        alt={map.environment.name}
+                        alt={map.environment.name || 'Ambiente'}
                         className="w-full max-w-xs object-cover rounded-lg border border-purple-700"
+                        onError={e => { e.currentTarget.style.display = 'none'; }}
                       />
                     </div>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </section>
@@ -104,7 +106,7 @@ export default function MapDetail() {
 
               <div className="bg-purple-800/70 border border-purple-700 rounded-xl p-5">
                 <h2 className="text-xl font-extrabold text-cyan-300 mb-3">Estatisticas por Time</h2>
-                {!map.teamStats || map.teamStats.length === 0 ? (
+                {!Array.isArray(map.teamStats) || map.teamStats.length === 0 ? (
                   <p className="text-sm text-purple-100">Sem dados de times para este mapa.</p>
                 ) : (
                   <div className="space-y-3">

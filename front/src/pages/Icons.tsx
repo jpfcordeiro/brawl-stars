@@ -137,7 +137,7 @@ export default function Icons() {
           <p className="inline-block bg-cyan-400/20 text-cyan-200 border border-cyan-300/40 px-3 py-1 rounded-full text-sm font-bold mb-4">
             Galeria Tematica
           </p>
-          <h1 className="text-4xl md:text-5xl font-extrabold text-white">Colecao de Icones</h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white">Coleção de Ícones</h1>
           <p className="max-w-2xl mx-auto text-purple-100 mt-3">
             Explore os icones oficiais usados em perfil, clube e jogador com um visual inspirado no universo de Brawl Stars.
           </p>
