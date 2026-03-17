@@ -62,6 +62,20 @@ export default function BrawlerDetail() {
   const { id } = useParams();
   const { brawler, loading, error } = useBrawlerDetail(id);
 
+  // Se o id não for válido ou a API retornar erro, mostrar mensagem clara
+  if (error) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center bg-gradient-to-br from-purple-900 via-purple-800 to-purple-900">
+        <div className="bg-purple-800/80 border border-purple-700 rounded-2xl p-8 text-center text-gray-100 max-w-lg">
+          <h1 className="text-3xl font-bold text-red-400 mb-4">Erro ao carregar detalhes</h1>
+          <p className="mb-2">{error}</p>
+          <p className="mb-4">Verifique sua conexão ou tente novamente mais tarde.</p>
+          <a href="/brawlers" className="inline-block px-6 py-2 rounded-lg bg-yellow-400 text-purple-900 font-bold hover:bg-yellow-300 transition-colors">Voltar para Brawlers</a>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-[radial-gradient(circle_at_15%_10%,rgba(250,204,21,0.12),transparent_22%),radial-gradient(circle_at_85%_15%,rgba(34,211,238,0.13),transparent_28%),linear-gradient(135deg,#2a0b69_0%,#3d1384_50%,#2a0b69_100%)]">
       <div className="container mx-auto px-4 py-8 space-y-6">
@@ -94,15 +108,16 @@ export default function BrawlerDetail() {
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 items-center">
                 <div className="flex justify-center">
                   <img
-                    src={brawler.imageUrl3 || brawler.imageUrl2 || brawler.imageUrl}
-                    alt={brawler.name}
+                    src={brawler.imageUrl3 || brawler.imageUrl2 || brawler.imageUrl || '/fallback-brawler.png'}
+                    alt={brawler.name || 'Brawler sem nome'}
                     className="w-full max-w-sm object-contain drop-shadow-[0_18px_25px_rgba(0,0,0,0.35)]"
+                    onError={e => { e.currentTarget.src = '/fallback-brawler.png'; }}
                   />
                 </div>
 
                 <div>
                   <p className="text-cyan-200 uppercase tracking-wider text-sm mb-2">Detalhes do Brawler</p>
-                  <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">{brawler.name}</h1>
+                  <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">{brawler.name || 'Nome desconhecido'}</h1>
 
                   <div className="flex flex-wrap items-center gap-2 mb-4">
                     <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${rarityColors[brawler.rarity?.name] || 'bg-yellow-400'}`}>
@@ -111,12 +126,12 @@ export default function BrawlerDetail() {
                     <span className={`px-3 py-1 rounded-full text-xs font-bold text-white ${classColors[brawler.class?.name] || 'bg-gray-500'}`}>
                       {brawler.class?.name || 'Classe desconhecida'}
                     </span>
-                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-700 text-purple-100">ID #{brawler.id}</span>
+                    <span className="px-3 py-1 rounded-full text-xs font-bold bg-purple-700 text-purple-100">ID #{brawler.id || '???'}</span>
                   </div>
 
-                  <p className="text-gray-100 leading-relaxed">{brawler.description}</p>
+                  <p className="text-gray-100 leading-relaxed">{brawler.description || 'Sem descrição.'}</p>
 
-                  {brawler.link && (
+                  {brawler.link ? (
                     <a
                       href={brawler.link}
                       target="_blank"
@@ -125,13 +140,13 @@ export default function BrawlerDetail() {
                     >
                       Ver pagina oficial
                     </a>
-                  )}
+                  ) : null}
                 </div>
               </div>
             </section>
 
-            <AbilitySection title="Star Powers" color="text-yellow-300" abilities={brawler.starPowers || []} />
-            <AbilitySection title="Gadgets" color="text-green-300" abilities={brawler.gadgets || []} />
+            <AbilitySection title="Star Powers" color="text-yellow-300" abilities={Array.isArray(brawler.starPowers) ? brawler.starPowers : []} />
+            <AbilitySection title="Gadgets" color="text-green-300" abilities={Array.isArray(brawler.gadgets) ? brawler.gadgets : []} />
           </motion.div>
         )}
       </div>

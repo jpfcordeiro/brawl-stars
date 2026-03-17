@@ -62,12 +62,12 @@ export default function Maps() {
                 variants={{ hidden: { y: 30, opacity: 0 }, visible: { y: 0, opacity: 1 } }}
                 whileHover={{ scale: 1.05 }}
               >
-                <h2 className="text-2xl font-bold text-yellow-400 mb-2">{map.name}</h2>
+                <h2 className="text-2xl font-bold text-yellow-400 mb-2">{typeof map.name === 'string' ? map.name : JSON.stringify(map.name)}</h2>
                 <span className="block text-purple-300 font-semibold mb-1">
-                  {map.gameMode?.name || 'Modo desconhecido'}
+                  {typeof map.gameMode === 'object' && map.gameMode !== null ? (map.gameMode.name || 'Modo desconhecido') : (typeof map.gameMode === 'string' ? map.gameMode : 'Modo desconhecido')}
                 </span>
                 <p className="text-gray-100 mb-2">
-                  {map.environment || 'Ambiente desconhecido'}
+                  {typeof map.environment === 'string' ? map.environment : 'Ambiente desconhecido'}
                 </p>
 
                 <div className="mb-3 flex items-center justify-between">

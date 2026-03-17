@@ -1,5 +1,5 @@
-import { motion } from 'framer-motion';
 import { useIcons } from '../hooks/useIcons';
+import { motion } from 'framer-motion';
 import { useMemo, useState } from 'react';
 
 type IconSectionProps = {
@@ -7,7 +7,11 @@ type IconSectionProps = {
   subtitle: string;
   colorClass: string;
   borderClass: string;
-  icons: Array<{ id: number; imageUrl: string }>;
+  icons: Array<{
+    id: number;
+    imageUrl: string;
+    hash?: string;
+  }>;
 };
 
 function IconSection({ title, subtitle, colorClass, borderClass, icons }: IconSectionProps) {
@@ -36,19 +40,30 @@ function IconSection({ title, subtitle, colorClass, borderClass, icons }: IconSe
           <motion.div
             key={icon.id}
             className={`group relative bg-purple-800/85 ${borderClass} rounded-xl p-3 shadow-md`}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.35, delay: index * 0.01 }}
-            whileHover={{ y: -5, scale: 1.06 }}
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.4, delay: index * 0.03, type: 'spring', stiffness: 120 }}
+            whileHover={{ scale: 1.12, boxShadow: '0 0 16px #facc15' }}
+            whileTap={{ scale: 0.95 }}
           >
             <div className="absolute inset-0 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity bg-gradient-to-br from-yellow-300/10 to-transparent" />
-            <img
-              src={icon.imageUrl}
-              alt={`Icone ${icon.id}`}
-              loading="lazy"
-              className="relative z-10 w-full h-auto object-contain drop-shadow-[0_6px_8px_rgba(0,0,0,0.35)]"
-            />
-            <span className="relative z-10 block text-center text-xs text-purple-200 mt-2">#{icon.id}</span>
+            <div className="flex flex-col items-center justify-center min-h-[40px]">
+              {icon.imageUrl ? (
+                <img
+                  src={icon.imageUrl}
+                  alt={`Icone ${icon.id}`}
+                  loading="lazy"
+                  className="relative z-10 w-full h-auto object-contain drop-shadow-[0_6px_8px_rgba(0,0,0,0.35)]"
+                  onError={e => { e.currentTarget.style.display = 'none'; e.currentTarget.parentElement?.querySelector('.icon-hash')?.classList.remove('hidden'); }}
+                />
+              ) : null}
+              <span className={"icon-hash relative z-10 block text-center text-xs text-yellow-300 font-mono mt-2" + (icon.imageUrl ? ' hidden' : '')}>
+                {icon.hash || 'Sem hash'}
+              </span>
+            </div>
+            <span className="relative z-10 block text-center text-xs text-purple-200 mt-1">
+              #{icon.id}
+            </span>
           </motion.div>
         ))}
       </div>
